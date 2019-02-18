@@ -17,13 +17,18 @@ type DataError interface {
 	Wrap(err DataError) DataError
 	// GetCause will return the cause of this error
 	GetCause() DataError
+	// GetFields returns the extra fields for giving better error descriptions
+	GetFields() map[string]interface{}
+	// AddFields will add fields to the given DataErrors fields
+	AddFields(map[string]interface{})
 }
 
 type dataError struct {
-	inner error
-	code  string
-	msg   string
-	cause DataError
+	inner  error
+	code   string
+	msg    string
+	cause  DataError
+	fields map[string]interface{}
 }
 
 func (d *dataError) Error() string {
@@ -45,6 +50,19 @@ func (d *dataError) Wrap(err DataError) DataError {
 
 func (d *dataError) GetCause() DataError {
 	return d.cause
+}
+
+func (d *dataError) GetFields() map[string]interface{} {
+	return d.fields
+}
+
+// AddFields adds the given fields to the data error
+// NOTE: Any field given that matches one in the data DataErrors
+// fields already will overwrite it
+func (d *dataError) AddFields(fields map[string]interface{}) {
+	for k, v := range fields {
+		d.fields[k] = v
+	}
 }
 
 // FromHTTPProblem will create a DataError from an HTTPProblem
