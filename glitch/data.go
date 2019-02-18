@@ -21,6 +21,8 @@ type DataError interface {
 	GetFields() map[string]interface{}
 	// AddFields will add fields to the given DataErrors fields
 	AddFields(map[string]interface{})
+	// AddField will add the key and value pair to the data errors fields
+	AddField(key string, value interface{})
 }
 
 type dataError struct {
@@ -61,8 +63,12 @@ func (d *dataError) GetFields() map[string]interface{} {
 // fields already will overwrite it
 func (d *dataError) AddFields(fields map[string]interface{}) {
 	for k, v := range fields {
-		d.fields[k] = v
+		d.AddField(k, v)
 	}
+}
+
+func (d *dataError) AddField(key string, value interface{}) {
+	d.fields[key] = value
 }
 
 // FromHTTPProblem will create a DataError from an HTTPProblem
