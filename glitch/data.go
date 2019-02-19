@@ -80,9 +80,6 @@ func FromHTTPProblem(inner error, msg string) DataError {
 }
 
 // NewDataError will create a DataError from the information provided
-func NewDataError(inner error, code string, msg string, fields map[string]interface{}) DataError {
-	if fields == nil {
-		fields = map[string]interface{}{}
-	}
-	return &dataError{inner: inner, code: code, msg: msg, fields: fields}
+func NewDataError(inner error, code string, msg string) DataError {
+	return &dataError{inner: inner, code: code, msg: msg, fields: map[string]interface{}{}}
 }
