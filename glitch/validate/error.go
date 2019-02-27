@@ -21,7 +21,7 @@ func NewValidationError(field string, reason string) ValidationError {
 	return ve
 }
 
-func InitValidationErr() ValidationError {
+func InitValidationError() ValidationError {
 	return &validationError{invalidFields: map[string]string{}}
 }
 
