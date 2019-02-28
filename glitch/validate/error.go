@@ -21,6 +21,10 @@ func NewValidationError(field string, reason string) ValidationError {
 	return ve
 }
 
+func InitValidationError() ValidationError {
+	return &validationError{invalidFields: map[string]string{}}
+}
+
 // AddInvalidField adds a field to the map of all invalid fields that failed validation
 func (ve *validationError) AddInvalidField(field string, reason string) {
 	ve.invalidFields[field] = reason
