@@ -23,7 +23,7 @@ type DataError interface {
 	AddFields(map[string]interface{})
 	// AddField will add the key and value pair to the data errors fields
 	AddField(key string, value interface{})
-	// Stringer implements the string interface for %s in fmt calls
+	// String implements the string interface for %s in fmt calls
 	String() string
 }
 
