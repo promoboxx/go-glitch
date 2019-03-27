@@ -23,6 +23,8 @@ type DataError interface {
 	AddFields(map[string]interface{})
 	// AddField will add the key and value pair to the data errors fields
 	AddField(key string, value interface{})
+	// String implements the string interface for %s in fmt calls
+	String() string
 }
 
 type dataError struct {
@@ -69,6 +71,10 @@ func (d *dataError) AddFields(fields map[string]interface{}) {
 
 func (d *dataError) AddField(key string, value interface{}) {
 	d.fields[key] = value
+}
+
+func (d *dataError) String() string {
+	return d.Error()
 }
 
 // FromHTTPProblem will create a DataError from an HTTPProblem
