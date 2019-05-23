@@ -17,6 +17,8 @@ type DataError interface {
 	Wrap(err DataError) DataError
 	// GetCause will return the cause of this error
 	GetCause() DataError
+	// IsTransient will return if the error is considered transient
+	IsTransient() bool
 	// GetFields returns the extra fields for giving better error descriptions
 	GetFields() map[string]interface{}
 	// AddFields will add fields to the given DataErrors fields
@@ -28,11 +30,12 @@ type DataError interface {
 }
 
 type dataError struct {
-	inner  error
-	code   string
-	msg    string
-	cause  DataError
-	fields map[string]interface{}
+	inner       error
+	code        string
+	msg         string
+	cause       DataError
+	isTransient bool
+	fields      map[string]interface{}
 }
 
 func (d *dataError) Error() string {
@@ -54,6 +57,10 @@ func (d *dataError) Wrap(err DataError) DataError {
 
 func (d *dataError) GetCause() DataError {
 	return d.cause
+}
+
+func (d *dataError) IsTransient() bool {
+	return d.isTransient
 }
 
 func (d *dataError) GetFields() map[string]interface{} {
@@ -80,7 +87,7 @@ func (d *dataError) String() string {
 // FromHTTPProblem will create a DataError from an HTTPProblem
 func FromHTTPProblem(inner error, msg string) DataError {
 	if httpProblem, ok := inner.(HTTPProblem); ok {
-		return &dataError{inner: inner, code: httpProblem.Code, msg: msg}
+		return &dataError{inner: inner, code: httpProblem.Code, msg: msg, isTransient: httpProblem.IsTransient}
 	}
 	return &dataError{inner: inner, code: UnknownCode, msg: msg}
 }
@@ -88,4 +95,9 @@ func FromHTTPProblem(inner error, msg string) DataError {
 // NewDataError will create a DataError from the information provided
 func NewDataError(inner error, code string, msg string) DataError {
 	return &dataError{inner: inner, code: code, msg: msg, fields: map[string]interface{}{}}
+}
+
+// NewTransientDataError will create a DataError from the information provided and set the isTransient flag to true
+func NewTransientDataError(inner error, code string, msg string) DataError {
+	return &dataError{inner: inner, code: code, msg: msg, isTransient: true, fields: map[string]interface{}{}}
 }
