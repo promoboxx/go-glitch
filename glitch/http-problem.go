@@ -13,7 +13,7 @@ type HTTPProblem struct {
 	Detail      string `json:"detail,omitempty"`
 	Instance    string `json:"instance,omitempty"`
 	Code        string `json:"code,omitempty"`
-	IsTransient bool   `json:"is_transient,omitempty"`
+	IsTransient bool   `json:"is_transient"`
 }
 
 func (h HTTPProblem) Error() string {
