@@ -13,6 +13,8 @@ type DataError interface {
 	Inner() error
 	// Code returns a specific error code, this is meant to be a machine friendly string
 	Code() string
+	// Msg returns the originating message
+	Msg() string
 	// Wrap will set err as the cause of the error and returns itself
 	Wrap(err DataError) DataError
 	// GetCause will return the cause of this error
@@ -48,6 +50,10 @@ func (d *dataError) Inner() error {
 
 func (d *dataError) Code() string {
 	return d.code
+}
+
+func (d *dataError) Msg() string {
+	return d.msg
 }
 
 func (d *dataError) Wrap(err DataError) DataError {
