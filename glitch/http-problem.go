@@ -6,6 +6,7 @@ import "fmt"
 // It implements the https://datatracker.ietf.org/doc/rfc7807 spec with these additional fields:
 // 		code: meant to be machine readable and give clients enough information to handle the error appropriately
 //		is_transient: meant to inform clients that the problem is considered transient and could be retried
+// swagger:model HTTPProblem
 type HTTPProblem struct {
 	Type        string `json:"type,omitempty"`
 	Title       string `json:"title,omitempty"`
