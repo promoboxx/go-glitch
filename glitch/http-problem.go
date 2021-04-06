@@ -17,3 +17,12 @@ type HTTPProblem struct {
 func (h HTTPProblem) Error() string {
 	return fmt.Sprintf("HTTPProblem: [%d - %s] - %s - %s", h.Status, h.Code, h.Title, h.Detail)
 }
+
+type HTTPProblemMetadata struct {
+	HTTPProblem
+	Metadata interface{} `json:"metadata"`
+}
+
+func (h HTTPProblemMetadata) Error() string {
+	return fmt.Sprintf("%s - %#v", h.HTTPProblem.Error(), h.Metadata)
+}
