@@ -19,6 +19,8 @@ type DataError interface {
 	GetCause() DataError
 	// GetFields returns the extra fields for giving better error descriptions
 	GetFields() map[string]interface{}
+	// GetField returns the data of a field from the fields member of the DataError if one exists
+	GetField(name string) interface{}
 	// AddFields will add fields to the given DataErrors fields
 	AddFields(map[string]interface{})
 	// AddField will add the key and value pair to the data errors fields
@@ -58,6 +60,10 @@ func (d *dataError) GetCause() DataError {
 
 func (d *dataError) GetFields() map[string]interface{} {
 	return d.fields
+}
+
+func (d *dataError) GetField(name string) interface{} {
+	return d.fields[name]
 }
 
 // AddFields adds the given fields to the data error
