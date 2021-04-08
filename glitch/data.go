@@ -98,9 +98,13 @@ func (d *dataError) String() string {
 
 // FromHTTPProblem will create a DataError from an HTTPProblem
 func FromHTTPProblem(inner error, msg string) DataError {
-	if httpProblem, ok := inner.(HTTPProblem); ok {
-		return &dataError{inner: inner, code: httpProblem.Code, msg: msg, isTransient: httpProblem.IsTransient}
+	switch ie := inner.(type) {
+	case HTTPProblem:
+		return &dataError{inner: inner, code: ie.Code, msg: msg, isTransient: ie.IsTransient}
+	case HTTPProblemMetadata:
+		return &dataError{inner: inner, code: ie.Code, msg: msg, isTransient: ie.IsTransient, fields: map[string]interface{}{"metadata": ie.Metadata}}
 	}
+
 	return &dataError{inner: inner, code: UnknownCode, msg: msg}
 }
 
