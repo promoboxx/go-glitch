@@ -15,7 +15,7 @@ jobs:
           command: test -z "$(gofmt -s -l fb)"
       - run:
           name: go test
-          command: go test -mod vendor -cover -race -run Unit -coverprofile=c.out `go list -mod vendor ./... | grep -v -e "vendor" -e "functional" -e "integration"`
+          command: go test -race -run Unit ./...
 
       - store_test_results:
           path: testresults
