@@ -64,6 +64,10 @@ func (d *dataError) Wrap(err DataError) DataError {
 }
 
 func (d *dataError) GetCause() DataError {
+	if d.cause == nil {
+		return d
+	}
+
 	return d.cause
 }
 
