@@ -7,6 +7,6 @@ type GQLProblem struct {
 	ErrorCode string `json:"code,omitempty"`
 }
 
-func (g GQLProblem) Error() string {
+func (g *GQLProblem) Error() string {
 	return fmt.Sprintf("Error Code [%s] - %s", g.ErrorCode, g.PublicMsg)
 }
