@@ -22,16 +22,16 @@ jobs:
 
       - store_test_results:
           path: testresults
-    run-static-analysis-job:
-      docker:
-        - image: cimg/node:current
-      steps:
-        - checkout
-        - datadog/analyze:
-            service: "go-glitch"
-            env: "ci"
-            site: datadoghq.com
-            cpu_count: 2
+  run-static-analysis-job:
+    docker:
+      - image: cimg/node:current
+    steps:
+      - checkout
+      - datadog/analyze:
+          service: "go-glitch"
+          env: "ci"
+          site: datadoghq.com
+          cpu_count: 2
 
 workflows:
   version: 2 
