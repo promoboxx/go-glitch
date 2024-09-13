@@ -14,7 +14,7 @@ jobs:
       - checkout
       - run:
           name: go vet
-          command: go vet -mod vendor ./fb/...
+          command: go vet ./...
       - run:
           name: gofmt
           command: test -z "$(gofmt -s -l fb)"
