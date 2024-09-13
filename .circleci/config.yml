@@ -5,11 +5,13 @@ orbs:
 jobs:
   test:
     docker:
-      - image: pbxx/go-docker-base
+      - image: pbxx/go-docker-analysis:master-latest
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
     working_directory: /go/src/github.com/promoboxx/go-glitch
     steps:
       - checkout
-
       - run:
           name: go vet
           command: go vet -mod vendor ./fb/...
@@ -37,7 +39,9 @@ workflows:
   version: 2 
   test:
     jobs:
-      - test
+      - test:
+          context:
+            - dockerhub
       - run-static-analysis-job:
           context:
             - datadog
