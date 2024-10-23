@@ -1,15 +1,20 @@
 version: 2.1
+orbs:
+  datadog: datadog/datadog-static-analyzer-circleci-orb@1.0.4
+
 jobs:
   test:
     docker:
-      - image: pbxx/go-docker-base
+      - image: pbxx/go-docker-analysis:master-latest
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
     working_directory: /go/src/github.com/promoboxx/go-glitch
     steps:
       - checkout
-
       - run:
           name: go vet
-          command: go vet -mod vendor ./fb/...
+          command: go vet ./...
       - run:
           name: gofmt
           command: test -z "$(gofmt -s -l fb)"
@@ -19,8 +24,25 @@ jobs:
 
       - store_test_results:
           path: testresults
+  run-static-analysis-job:
+    docker:
+      - image: cimg/node:current
+    steps:
+      - checkout
+      - datadog/analyze:
+          service: "go-glitch"
+          env: "ci"
+          site: datadoghq.com
+          cpu_count: 2
+
 workflows:
-  version: 2.1
+  version: 2 
   test:
     jobs:
-      - test
+      - test:
+          context:
+            - dockerhub
+      - run-static-analysis-job:
+          context:
+            - datadog
+
